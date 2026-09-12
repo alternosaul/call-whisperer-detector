@@ -10,33 +10,75 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicDetectRouteImport } from './routes/api/public/detect'
+import { Route as ApiPublicModelsRouteImport } from './routes/api/public/models'
+import { Route as ApiPublicDetectAudioRouteImport } from './routes/api/public/detect.audio'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicDetectRoute = ApiPublicDetectRouteImport.update({
+  id: '/api/public/detect',
+  path: '/api/public/detect',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicModelsRoute = ApiPublicModelsRouteImport.update({
+  id: '/api/public/models',
+  path: '/api/public/models',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicDetectAudioRoute = ApiPublicDetectAudioRouteImport.update({
+  id: '/audio',
+  path: '/audio',
+  getParentRoute: () => ApiPublicDetectRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/public/detect': typeof ApiPublicDetectRouteWithChildren
+  '/api/public/models': typeof ApiPublicModelsRoute
+  '/api/public/detect/audio': typeof ApiPublicDetectAudioRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/public/detect': typeof ApiPublicDetectRouteWithChildren
+  '/api/public/models': typeof ApiPublicModelsRoute
+  '/api/public/detect/audio': typeof ApiPublicDetectAudioRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/public/detect': typeof ApiPublicDetectRouteWithChildren
+  '/api/public/models': typeof ApiPublicModelsRoute
+  '/api/public/detect/audio': typeof ApiPublicDetectAudioRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/api/public/detect'
+    | '/api/public/models'
+    | '/api/public/detect/audio'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/api/public/detect'
+    | '/api/public/models'
+    | '/api/public/detect/audio'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/public/detect'
+    | '/api/public/models'
+    | '/api/public/detect/audio'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiPublicDetectRoute: typeof ApiPublicDetectRouteWithChildren
+  ApiPublicModelsRoute: typeof ApiPublicModelsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +90,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/detect': {
+      id: '/api/public/detect'
+      path: '/api/public/detect'
+      fullPath: '/api/public/detect'
+      preLoaderRoute: typeof ApiPublicDetectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/models': {
+      id: '/api/public/models'
+      path: '/api/public/models'
+      fullPath: '/api/public/models'
+      preLoaderRoute: typeof ApiPublicModelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/detect/audio': {
+      id: '/api/public/detect/audio'
+      path: '/audio'
+      fullPath: '/api/public/detect/audio'
+      preLoaderRoute: typeof ApiPublicDetectAudioRouteImport
+      parentRoute: typeof ApiPublicDetectRoute
+    }
   }
 }
 
+interface ApiPublicDetectRouteChildren {
+  ApiPublicDetectAudioRoute: typeof ApiPublicDetectAudioRoute
+}
+
+const ApiPublicDetectRouteChildren: ApiPublicDetectRouteChildren = {
+  ApiPublicDetectAudioRoute: ApiPublicDetectAudioRoute,
+}
+
+const ApiPublicDetectRouteWithChildren = ApiPublicDetectRoute._addFileChildren(
+  ApiPublicDetectRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiPublicDetectRoute: ApiPublicDetectRouteWithChildren,
+  ApiPublicModelsRoute: ApiPublicModelsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
