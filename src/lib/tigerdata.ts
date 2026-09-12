@@ -39,7 +39,6 @@ let history: DetectionResult[] = [];
 const listeners = new Set<() => void>();
 
 function emit() {
-  listeners.add;
   for (const l of listeners) l();
 }
 
