@@ -41,3 +41,11 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+---
+
+## Autor
+
+Hecho por **Saúl Hinojosa** — portafolio: [saulhinojosa.site](https://saulhinojosa.site)
+
+Cómo se construyó: [saulhinojosa.site/es/blog/galena-ai/](https://saulhinojosa.site/es/blog/galena-ai/)
